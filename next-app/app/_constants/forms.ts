@@ -1,6 +1,6 @@
-import { StringArrayMap, StringMap } from '../_types';
+import { StringArrayMap } from '@app/_types';
 
-const FORM_CONSTANTS: StringMap = {
+const FORM_CONSTANTS = {
   MAX_PERSON_IMG_SIZE: '50000000',
   ACCEPT_PERSON_IMG_EXTENSIONS: '.jpeg, .png',
 };
@@ -9,23 +9,20 @@ const VALID_FILE_EXTENSIONS: StringArrayMap = {
   personImg: ['png', 'jpeg'],
 };
 
-const BUCKET_KEYS: StringMap = {
-  TRAIN: 'train',
-  TEST: 'test',
+const FILENAME_KEYS = {
+  PURPOSE: {
+    TRAIN: 'train',
+    TEST: 'test',
+  },
 };
 
-const BUCKET_OBJ_TAG_VALUES: StringMap = {
-  // simpsons
-  BART: 'bart_simpson',
-  HOMER: 'homer_simpson',
-  LISA: 'lisa_simpson',
-  MARGE: 'marge_simpson',
-  // purpose
-  ...BUCKET_KEYS,
+const FORM_DATA_KEYS = {
+  PREDICTION_IMG: 'predictImg',
+  PREDICTION_IMG_BASE64: 'predictImgBase64',
+  PREDICTION_RESULT: 'predictionResult',
 };
 
-const PREDICTION_TIME_CHART_UNITS: StringMap = {
-  ALL: 'all',
+const PREDICTION_TIME_CHART_UNITS = {
   DAY: 'day',
   MONTH: 'month',
   YEAR: 'year',
@@ -34,7 +31,7 @@ const PREDICTION_TIME_CHART_UNITS: StringMap = {
 export {
   FORM_CONSTANTS,
   VALID_FILE_EXTENSIONS,
-  BUCKET_KEYS,
-  BUCKET_OBJ_TAG_VALUES,
+  FORM_DATA_KEYS,
   PREDICTION_TIME_CHART_UNITS,
+  FILENAME_KEYS,
 };

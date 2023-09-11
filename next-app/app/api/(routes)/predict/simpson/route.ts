@@ -2,45 +2,39 @@ import { NextRequest, NextResponse } from 'next/server';
 import { v4 as uuidv4 } from 'uuid';
 
 import {
-  BUCKET_KEYS,
-  BUCKET_OBJ_TAG_VALUES,
+  FILENAME_KEYS,
+  FORM_DATA_KEYS,
   StatusCodes,
 } from '../../../../_constants';
 import { getStatusText, s3Bucket } from '../../../_utils';
 import { predictSimpson } from '@app/api/_rest';
 import { getMaxSimilarChar } from '@app/api/_helpers';
-import { BUCKET_OBJ_TAG_KEYS } from '@app/api/_constants';
 
 export async function POST(req: NextRequest) {
   try {
     const data = await req.formData();
-    const file: File | null = data.get(BUCKET_KEYS.TRAIN) as unknown as File;
-    if (!file) throw Error('No image found. Please, try again.');
+    const img = data.get(FORM_DATA_KEYS.PREDICTION_IMG) as File;
+    const imgBase64 = data.get(FORM_DATA_KEYS.PREDICTION_IMG_BASE64) as string;
+    if (!img) throw Error('No image found. Please, try again.');
 
-    const key = `${BUCKET_KEYS.TRAIN}/${uuidv4()}`;
-    await s3Bucket.putObject(file, key);
+    const { predict_data: predictionData, predict_time: predictionTime } =
+      await predictSimpson(imgBase64);
 
-    const { predict_data: predictData, predict_time: predictTime } =
-      await predictSimpson(key);
+    const characterPredicted = getMaxSimilarChar(predictionData);
 
-    console.log(predictData, predictTime);
+    const imageBucketKey = `${
+      FILENAME_KEYS.PURPOSE.TRAIN
+    }/${characterPredicted}/${uuidv4()}`;
 
-    await s3Bucket.putTagging(key, [
-      {
-        Key: BUCKET_OBJ_TAG_KEYS.CLASS_NAME,
-        Value: getMaxSimilarChar(predictData),
-      },
-      {
-        Key: BUCKET_OBJ_TAG_KEYS.PURPOSE,
-        Value: BUCKET_OBJ_TAG_VALUES.TRAIN,
-      },
-    ]);
+    await s3Bucket.putObject(img, imageBucketKey);
+
+    console.log(predictionData, predictionTime);
 
     console.log('Waiting for user feedback...');
     return NextResponse.json({
-      predictData,
-      predictTime,
-      key,
+      predictionData,
+      predictionTime,
+      imageBucketKey,
     });
   } catch (e) {
     console.error(e);

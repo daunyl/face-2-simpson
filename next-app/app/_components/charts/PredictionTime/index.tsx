@@ -57,8 +57,6 @@ const getChartData = async function (url: string) {
     const res = await fetch(url);
     const { chartData } = await res.json();
 
-    console.log(chartData);
-
     return chartData;
   } catch (e) {
     if (e instanceof Error) console.error(e.message);
@@ -69,7 +67,9 @@ const PredictionTimeChart = function () {
   const [data, setData] = useState<
     [string, PredictionTimePoint[]][] | undefined
   >(undefined);
-  const [unit, setUnit] = useState<TimeUnit>(undefined);
+  const [unit, setUnit] = useState<TimeUnit>(
+    PREDICTION_TIME_CHART_UNITS.DAY as TimeUnit
+  );
   const dateFormat = getDateFormatByUnit(unit);
 
   const updateData = async function () {
@@ -100,20 +100,19 @@ const PredictionTimeChart = function () {
 
   function getDateFormatByUnit(unit: TimeUnit): string {
     switch (unit) {
+      default:
       case PREDICTION_TIME_CHART_UNITS.DAY:
         return 'MMM DD, YYYY';
       case PREDICTION_TIME_CHART_UNITS.MONTH:
         return 'MMM YYYY';
       case PREDICTION_TIME_CHART_UNITS.YEAR:
         return 'YYYY';
-      case PREDICTION_TIME_CHART_UNITS.ALL:
-      default:
-        return 'lll';
     }
   }
 
   function getScaleOptionsByUnit(unit: TimeUnit): ScaleOptions {
     switch (unit) {
+      default:
       case PREDICTION_TIME_CHART_UNITS.DAY:
         return {
           unit: 'day',
@@ -133,14 +132,6 @@ const PredictionTimeChart = function () {
           unit: 'year',
           displayFormats: {
             year: 'YYYY',
-          },
-        };
-      case PREDICTION_TIME_CHART_UNITS.ALL:
-      default:
-        return {
-          unit: 'minute',
-          displayFormats: {
-            minute: 'lll',
           },
         };
     }
@@ -188,7 +179,7 @@ const PredictionTimeChart = function () {
             return dayjs(timestamp).format(dateFormat);
           },
           label: function (context) {
-            var label = context.dataset.label || '';
+            let label = context.dataset.label || '';
             if (label) {
               label += ': ';
             }
@@ -249,7 +240,7 @@ const PredictionTimeChart = function () {
       <SelectInput
         placeholder={'Pick unit of time'}
         value={unit}
-        onChange={setUnit}
+        onChange={(value) => setUnit(value as TimeUnit)}
         options={Object.values(PREDICTION_TIME_CHART_UNITS).map((unit) => ({
           value: unit,
           label: capitalizeWord(unit),

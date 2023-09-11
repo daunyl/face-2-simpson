@@ -1,5 +1,3 @@
-import { PREDICTION_TIME_CHART_UNITS } from '@app/_constants';
-
 interface StringMap {
   [key: string]: string;
 }
@@ -13,9 +11,14 @@ interface NumberMap {
 }
 
 interface PredictSimpsonData {
-  predictData: NumberMap;
-  predictTime: number;
-  key: string;
+  predictionData: Record<SimpsonCharacter, number>;
+  predictionTime: number;
+  imageBucketKey: string;
+}
+
+interface FeedbackData extends PredictSimpsonData {
+  userFeedback: boolean | null;
+  permissionToStore: boolean;
 }
 
 type RequestParams = {
@@ -24,7 +27,13 @@ type RequestParams = {
 
 type RequestSearchParams = {};
 
-type TimeUnit = keyof typeof PREDICTION_TIME_CHART_UNITS | undefined;
+type TimeUnit = 'day' | 'month' | 'year';
+
+type SimpsonCharacter =
+  | 'bart_simpson'
+  | 'homer_simpson'
+  | 'lisa_simpson'
+  | 'marge_simpson';
 
 export type {
   StringMap,
@@ -34,4 +43,6 @@ export type {
   RequestParams,
   RequestSearchParams,
   TimeUnit,
+  FeedbackData,
+  SimpsonCharacter,
 };
