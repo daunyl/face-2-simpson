@@ -1,11 +1,20 @@
-const SubmitButton = function () {
+import { FC } from 'react';
+import styles from './styles.module.css';
+
+interface SubmitButtonProps {
+  isDisabled: boolean;
+}
+
+const SubmitButton: FC<SubmitButtonProps> = function ({ isDisabled }) {
   return (
     <div className='flex items-center justify-end'>
       <button
         type='submit'
-        className='px-4 py-2 text-white bg-highlight rounded-md hover:bg-opacity-90 hover:shadow-lg transition-all duration-300'
+        className={styles['submit-button']}
+        role='button'
+        disabled={isDisabled}
       >
-        Submit
+        Predict
       </button>
     </div>
   );

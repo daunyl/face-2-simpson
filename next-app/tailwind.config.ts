@@ -1,4 +1,5 @@
 import type { Config } from 'tailwindcss';
+import plugin from 'tailwindcss/plugin';
 
 const config: Config = {
   content: [
@@ -8,21 +9,23 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        primary: '#FFDB00', // Simpsons yellow
-        secondary: '#87C442', // Bart's T-shirt green
-        highlight: '#36A2C2', // Marge's hair blue
-        tertiary: '#E31D27', // Bart's shorts red
+        primary: '#ff6e42', // orange
         neutral: '#D1D5DB',
       },
       fontSize: {
-        title: '2rem',
-        subtitle: '1.5rem',
-        caption: '0.875rem',
+        xxl: '3rem', // Suitable for main headers
+        xl: '2.25rem', // Suitable for sub-headers or large headings
+        lg: '1.5rem', // Suitable for smaller headers or emphasized text
+        base: '1rem', // Standard size for body text
+        sm: '0.875rem', // Suitable for slightly smaller text like captions or footnotes
+        xs: '0.75rem', // Suitable for the smallest readable text
       },
+
       boxShadow: {
         soft: '0 4px 6px rgba(0, 0, 0, 0.1)',
         medium: '0 6px 15px rgba(0, 0, 0, 0.15)',
         hard: '0 10px 25px rgba(0, 0, 0, 0.2)',
+        image: '0px 25px 50px -12px rgba(0, 0, 0, 0.3) ',
       },
       borderRadius: {
         card: '10px',
@@ -37,6 +40,8 @@ const config: Config = {
         fast: '200ms',
         medium: '500ms',
         slow: '1000ms',
+        '3000': '3000ms',
+        '0': '0ms',
       },
       spacing: {
         18: '4.5rem',
@@ -49,20 +54,21 @@ const config: Config = {
         start: '#ffed4a',
         end: '#d7385e',
       },
-      keyframes: {
-        // Simple animations for added flair
-        bounce: {
-          '0%, 20%, 50%, 80%, 100%': { transform: 'translateY(0)' },
-          '40%': { transform: 'translateY(-30px)' },
-          '60%': { transform: 'translateY(-15px)' },
-        },
-      },
-      animation: {
-        bounce: 'bounce 2s infinite',
-      },
     },
   },
-  plugins: [],
+  plugins: [
+    plugin(function ({ matchUtilities, theme }) {
+      matchUtilities(
+        {
+          'translate-z': (value) => ({
+            '--tw-translate-z': value,
+            transform: ` translate3d(var(--tw-translate-x), var(--tw-translate-y), var(--tw-translate-z)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))`,
+          }), // this is actual CSS
+        },
+        { values: theme('translate'), supportsNegativeValues: true }
+      );
+    }),
+  ],
 };
 
 export default config;

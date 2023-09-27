@@ -20,11 +20,15 @@ const CLIENT_NAV_KEYS: {
     iconKey: 'github',
     newTab: true,
   },
-  {
-    path: '/retrain',
-    name: 'Retrain',
-    iconKey: 'retrain',
-  },
+  // {
+  //   path: '/retrain',
+  //   name: 'Retrain',
+  //   iconKey: 'retrain',
+  // },
 ];
 
-export { CLIENT_NAV_KEYS };
+const QUERY_KEYS = {
+  WITH_PROGRESS_BAR: 'withProgressBar',
+};
+
+export { CLIENT_NAV_KEYS, QUERY_KEYS };

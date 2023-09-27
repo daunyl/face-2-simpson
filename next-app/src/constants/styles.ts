@@ -46,4 +46,6 @@ const CHART_STYLES: { [key: string]: any } = {
   },
 };
 
-export { CHART_STYLES };
+const PROGRESS_BAR_COLORS = ['yellow', 'red', 'cyan', 'navy', 'lime', 'white'];
+
+export { CHART_STYLES, PROGRESS_BAR_COLORS };
