@@ -1,3 +1,5 @@
+import { StaticImageData } from 'next/image';
+
 interface StringMap {
   [key: string]: string;
 }
@@ -23,17 +25,14 @@ interface FeedbackData extends PredictSimpsonData {
 
 type RequestParams = {
   unit?: TimeUnit;
+  bin?: number;
 };
 
 type RequestSearchParams = {};
 
 type TimeUnit = 'day' | 'month' | 'year';
 
-type SimpsonCharacter =
-  | 'bart_simpson'
-  | 'homer_simpson'
-  | 'lisa_simpson'
-  | 'marge_simpson';
+type SimpsonCharacter = 'bart_simpson' | 'homer_simpson' | 'lisa_simpson' | 'marge_simpson';
 
 // type AlertOptions = 'loading' | 'success' | 'info' | 'error' | 'warn';
 
@@ -42,11 +41,19 @@ enum AlertOptions {
   success = 'success',
   info = 'info',
   error = 'error',
-  warn = 'warn',
+  warn = 'warn'
 }
 
 enum AlertIconKeys {
-  homerError = 'homerError',
+  homerError = 'homerError'
+}
+
+interface DeveloperData {
+  img: StaticImageData;
+  buttons: { href: string; iconKey: string; newTab: boolean }[];
+  name: string;
+  position: string;
+  area: string[];
 }
 
 export type {
@@ -59,6 +66,7 @@ export type {
   TimeUnit,
   FeedbackData,
   SimpsonCharacter,
+  DeveloperData
 };
 
 export { AlertOptions, AlertIconKeys };
