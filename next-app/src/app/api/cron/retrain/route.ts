@@ -1,10 +1,11 @@
 import { DB_COUNTER_CHARS, ENOUGH_TRAIN_DATA, StatusCodes } from '@src/constants';
+import sendErrorMessage from '@src/helpers/sendErrorMessage';
 import { ImageCounter, Accuracy } from '@src/models';
 import { retrainModel } from '@src/rest';
 import { connectToDB, getStatusText } from '@src/utils';
 import { NextRequest, NextResponse } from 'next/server';
 
-export async function POST(req: NextRequest) {
+export async function GET(req: NextRequest) {
   try {
     await connectToDB();
     const data = await ImageCounter.find({});
@@ -32,6 +33,7 @@ export async function POST(req: NextRequest) {
       DB_COUNTER_CHARS.forEach((char) =>
         console.log(char, data.find((c) => c._id === char)?.seq || 'not exist')
       );
+      console.groupEnd();
     }
 
     return NextResponse.json(null);
@@ -39,7 +41,7 @@ export async function POST(req: NextRequest) {
     console.error(e);
     if (e instanceof Error)
       return NextResponse.json(
-        { error: e.message },
+        { error: sendErrorMessage(e.message) },
         {
           status: StatusCodes.INTERNAL_SERVER_ERROR,
           statusText: getStatusText(StatusCodes.INTERNAL_SERVER_ERROR)

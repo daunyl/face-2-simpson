@@ -5,6 +5,7 @@ import cv2
 
 from .exceptions import NoFaceDetected, MultipleFacesDetected
 
+
 class Transforms():
     def __init__(self, model_kind='classification'):
         model_kind_dict = {'classification', 'facial_markings'}
@@ -22,13 +23,10 @@ class Transforms():
         imgtest = cv2.cvtColor(np.array(image), cv2.COLOR_RGB2BGR)
 
         faces = self.facecascade.detectMultiScale(imgtest,
-                                                  scaleFactor=1.1, minNeighbors=3)
+                                                  scaleFactor=1.1, minNeighbors=5)
 
         if len(faces) == 0:
             raise NoFaceDetected()
-
-        elif len(faces) > 1:
-            raise MultipleFacesDetected()
 
         left, top, width, height = faces[0]
 
